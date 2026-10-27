@@ -13,6 +13,16 @@ if (!fs.existsSync(DATA_DIR)) {
   } catch (e) {}
 }
 
+// Bundle database.json secara eksplisit agar NFT bundler Vercel memasukkannya ke artifact
+let bundledDbData = null;
+try {
+  bundledDbData = require('../data/database.json');
+} catch (e) {
+  try {
+    bundledDbData = require('./data/database.json');
+  } catch (e2) {}
+}
+
 const INITIAL_DB = {
   settings: {
     businessName: 'Berkah Plastik & Perabot Keluarga',
@@ -173,38 +183,14 @@ const INITIAL_DB = {
   ]
 };
 
-function getBundledDbPath() {
-  const candidates = [
-    path.join(process.cwd(), 'data', 'database.json'),
-    path.join(__dirname, '..', 'data', 'database.json'),
-    path.join(__dirname, 'data', 'database.json')
-  ];
-  for (let i = 0; i < candidates.length; i++) {
-    if (fs.existsSync(candidates[i])) {
-      return candidates[i];
-    }
-  }
-  return null;
-}
-
 function loadDB() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      const bundledPath = getBundledDbPath();
-      if (bundledPath && fs.existsSync(bundledPath)) {
-        const bundledRaw = fs.readFileSync(bundledPath, 'utf8');
-        try {
-          fs.writeFileSync(DB_FILE, bundledRaw, 'utf8');
-        } catch (e) {}
-        const parsed = JSON.parse(bundledRaw);
-        if (!parsed.sales) parsed.sales = [];
-        if (!parsed.transactions) parsed.transactions = [];
-        return parsed;
-      }
+      const initialData = bundledDbData || INITIAL_DB;
       try {
-        fs.writeFileSync(DB_FILE, JSON.stringify(INITIAL_DB, null, 2), 'utf8');
+        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
       } catch (e) {}
-      return INITIAL_DB;
+      return JSON.parse(JSON.stringify(initialData));
     }
     const raw = fs.readFileSync(DB_FILE, 'utf8');
     const parsed = JSON.parse(raw);
@@ -212,7 +198,7 @@ function loadDB() {
     if (!parsed.transactions) parsed.transactions = [];
     return parsed;
   } catch (err) {
-    return INITIAL_DB;
+    return JSON.parse(JSON.stringify(bundledDbData || INITIAL_DB));
   }
 }
 
@@ -247,7 +233,7 @@ function saveDB(data) {
     } catch (e) {}
   }
 
-  // 2. Mirror otomatis langsung ke file data/database.json di GitHub Repository (jika GITHUB_TOKEN & GITHUB_REPO diset di Vercel)
+  // 2. Mirror otomatis langsung ke file data/database.json di GitHub Repository jika token tersedia
   const ghToken = process.env.GITHUB_TOKEN;
   const ghRepo = process.env.GITHUB_REPO; // format: "username/nama-repo"
   const ghBranch = process.env.GITHUB_BRANCH || 'main';
@@ -736,11 +722,16 @@ function handleApiRequest(req, res) {
   return false;
 }
 
-// Export untuk Vercel Serverless Function sekaligus modul untuk server.js lokal
+// Export untuk Vercel Serverless Function dengan proteksi try/catch menyeluruh
 module.exports = function (req, res) {
-  const handled = handleApiRequest(req, res);
-  if (handled === false) {
-    sendJSON(res, 404, { ok: false, error: 'Endpoint API tidak ditemukan: ' + (req.url || '') });
+  try {
+    const handled = handleApiRequest(req, res);
+    if (handled === false) {
+      sendJSON(res, 404, { ok: false, error: 'Endpoint API tidak ditemukan: ' + (req.url || '') });
+    }
+  } catch (err) {
+    console.error('API Error:', err);
+    sendJSON(res, 500, { ok: false, error: 'Internal Error: ' + (err && err.message ? err.message : String(err)) });
   }
 };
 module.exports.handleApiRequest = handleApiRequest;

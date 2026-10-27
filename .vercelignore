@@ -1,0 +1,3 @@
+# Abaikan server.js dan script lokal agar Vercel melayani index.html sebagai file static Edge CDN
+server.js
+JALANKAN_SERVER.bat

@@ -46,7 +46,7 @@ function requestHandler(req, res) {
 
   // Hindari serve file sensitif / backend
   const baseName = path.basename(filePath);
-  if (baseName === 'server.js' || baseName === 'package.json' || baseName === 'vercel.json' || baseName === '.gitignore') {
+  if (baseName === 'server.js' || baseName === 'package.json' || baseName === 'vercel.json' || baseName === '.gitignore' || baseName === '.vercelignore') {
     res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     return res.end('403 Forbidden');
   }
@@ -57,7 +57,7 @@ function requestHandler(req, res) {
 
   fs.stat(filePath, function (err, stats) {
     if (err || !stats.isFile()) {
-      // Fallback ke index.html jika bukan file static tertentu
+      // Fallback ke index.html
       const indexPath = fs.existsSync(path.join(PUBLIC_DIR, 'index.html'))
         ? path.join(PUBLIC_DIR, 'index.html')
         : path.join(__dirname, 'index.html');
@@ -68,7 +68,8 @@ function requestHandler(req, res) {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Access-Control-Allow-Origin': '*'
         });
-        return fs.createReadStream(indexPath).pipe(res);
+        const content = fs.readFileSync(indexPath);
+        return res.end(content);
       }
 
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -93,8 +94,14 @@ function requestHandler(req, res) {
       headers['Cache-Control'] = 'public, max-age=3600';
     }
 
-    res.writeHead(200, headers);
-    fs.createReadStream(filePath).pipe(res);
+    fs.readFile(filePath, function (readErr, content) {
+      if (readErr) {
+        res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('500 Error reading file');
+      }
+      res.writeHead(200, headers);
+      res.end(content);
+    });
   });
 }
 
