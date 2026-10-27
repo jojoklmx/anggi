@@ -1,0 +1,255 @@
+{
+  "settings": {
+    "businessName": "Berkah Plastik & Perabot Keluarga",
+    "stores": [
+      {
+        "id": "toko1",
+        "name": "Toko 1 (Pusat)"
+      },
+      {
+        "id": "toko2",
+        "name": "Toko 2 (Cabang Pasar)"
+      },
+      {
+        "id": "toko3",
+        "name": "Toko 3 (Cabang Ruko)"
+      }
+    ],
+    "prefixRules": [
+      {
+        "prefix": "EMB",
+        "category": "Ember & Baskom"
+      },
+      {
+        "prefix": "BSK",
+        "category": "Ember & Baskom"
+      },
+      {
+        "prefix": "KRS",
+        "category": "Kursi & Meja"
+      },
+      {
+        "prefix": "MJA",
+        "category": "Kursi & Meja"
+      },
+      {
+        "prefix": "LMR",
+        "category": "Lemari & Laci"
+      },
+      {
+        "prefix": "LCI",
+        "category": "Lemari & Laci"
+      },
+      {
+        "prefix": "KTK",
+        "category": "Kontainer & Box"
+      },
+      {
+        "prefix": "BOX",
+        "category": "Kontainer & Box"
+      },
+      {
+        "prefix": "RAK",
+        "category": "Rak & Keranjang"
+      },
+      {
+        "prefix": "KRJ",
+        "category": "Rak & Keranjang"
+      },
+      {
+        "prefix": "BTL",
+        "category": "Botol & Termos"
+      },
+      {
+        "prefix": "TRM",
+        "category": "Botol & Termos"
+      },
+      {
+        "prefix": "DPR",
+        "category": "Peralatan Dapur"
+      },
+      {
+        "prefix": "KBR",
+        "category": "Alat Kebersihan"
+      },
+      {
+        "prefix": "SPU",
+        "category": "Alat Kebersihan"
+      },
+      {
+        "prefix": "PRT",
+        "category": "Kebutuhan Keluarga"
+      }
+    ],
+    "suppliers": [
+      "Distributor Lion Star",
+      "Distributor Napolly",
+      "Agen Shinpo Plastik",
+      "Grosir Olymplast",
+      "Supplier Perabot Umum"
+    ],
+    "cloudSyncUrl": ""
+  },
+  "products": [
+    {
+      "id": "p1",
+      "code": "EMB-001",
+      "name": "Ember Cor Hitam 18 Liter Anti Pecah",
+      "category": "Ember & Baskom",
+      "brand": "Shinpo",
+      "unit": "Pcs",
+      "costPrice": 12000,
+      "sellPrice": 18000,
+      "wholesalePrice": 15500,
+      "minStock": 15,
+      "stock": {
+        "toko1": 45,
+        "toko2": 20,
+        "toko3": 8
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p2",
+      "code": "EMB-002",
+      "name": "Ember Tutup Warna 6 Galon (24L)",
+      "category": "Ember & Baskom",
+      "brand": "Lion Star",
+      "unit": "Pcs",
+      "costPrice": 38000,
+      "sellPrice": 52000,
+      "wholesalePrice": 46000,
+      "minStock": 10,
+      "stock": {
+        "toko1": 18,
+        "toko2": 12,
+        "toko3": 14
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p3",
+      "code": "KRS-001",
+      "name": "Kursi Bakso Plastik Motif Anyaman Rotan",
+      "category": "Kursi & Meja",
+      "brand": "Napolly",
+      "unit": "Pcs",
+      "costPrice": 32000,
+      "sellPrice": 45000,
+      "wholesalePrice": 39000,
+      "minStock": 12,
+      "stock": {
+        "toko1": 30,
+        "toko2": 10,
+        "toko3": 6
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p4",
+      "code": "LMR-001",
+      "name": "Lemari Plastik 4 Susun Kunci + Cermin",
+      "category": "Lemari & Laci",
+      "brand": "Napolly",
+      "unit": "Unit",
+      "costPrice": 420000,
+      "sellPrice": 550000,
+      "wholesalePrice": 495000,
+      "minStock": 3,
+      "stock": {
+        "toko1": 6,
+        "toko2": 2,
+        "toko3": 4
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p5",
+      "code": "BOX-001",
+      "name": "Kontainer Box Roda 60 Liter Transparan",
+      "category": "Kontainer & Box",
+      "brand": "Shinpo",
+      "unit": "Pcs",
+      "costPrice": 68000,
+      "sellPrice": 90000,
+      "wholesalePrice": 80000,
+      "minStock": 8,
+      "stock": {
+        "toko1": 15,
+        "toko2": 5,
+        "toko3": 9
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p6",
+      "code": "RAK-001",
+      "name": "Rak Piring Plastik 3 Susun + Tutup",
+      "category": "Rak & Keranjang",
+      "brand": "Olymplast",
+      "unit": "Pcs",
+      "costPrice": 85000,
+      "sellPrice": 115000,
+      "wholesalePrice": 102000,
+      "minStock": 5,
+      "stock": {
+        "toko1": 8,
+        "toko2": 6,
+        "toko3": 3
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    },
+    {
+      "id": "p7",
+      "code": "KBR-001",
+      "name": "Sapu Ijuk & Pel Lantai Putar Set",
+      "category": "Alat Kebersihan",
+      "brand": "Lion Star",
+      "unit": "Set",
+      "costPrice": 95000,
+      "sellPrice": 130000,
+      "wholesalePrice": 115000,
+      "minStock": 6,
+      "stock": {
+        "toko1": 12,
+        "toko2": 4,
+        "toko3": 7
+      },
+      "photo": "",
+      "updatedAt": "2026-10-27T10:00:00.000Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx1",
+      "type": "IN",
+      "date": "2026-10-27T09:30:00.000Z",
+      "code": "EMB-001",
+      "productName": "Ember Cor Hitam 18 Liter Anti Pecah",
+      "category": "Ember & Baskom",
+      "supplier": "Agen Shinpo Plastik",
+      "invoiceNo": "SJ-2026-001",
+      "targetStore": "toko1",
+      "qty": 25,
+      "note": "Stok awal dari supplier"
+    },
+    {
+      "id": "tx2",
+      "type": "TRANSFER",
+      "date": "2026-10-27T11:15:00.000Z",
+      "code": "KRS-001",
+      "productName": "Kursi Bakso Plastik Motif Anyaman Rotan",
+      "category": "Kursi & Meja",
+      "fromStore": "toko1",
+      "targetStore": "toko2",
+      "qty": 10,
+      "note": "Tambahan stok ke Toko 2"
+    }
+  ]
+}

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id" manifest="/app.appcache">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- Meta Tag Khusus agar tampil Full-Screen seperti aplikasi asli di iPad Mini iOS 9 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Stok Perabot">
+  <title>Sistem Stok &amp; Kasir 3 Toko - Perabot Plastik &amp; Kebutuhan Keluarga</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- HEADER APLIKASI -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-area">
+        <div class="brand-icon">BP</div>
+        <div>
+          <h1 class="brand-title" id="headerBusinessName">Berkah Plastik &amp; Perabot Keluarga</h1>
+          <p class="brand-subtitle">Stok &amp; Kasir Multi-Toko (Toko 1, 2, 3) &bull; iPad Mini iOS 9 + Vercel Cloud Ready</p>
+        </div>
+      </div>
+      <div>
+        <span id="syncStatusBadge" class="sync-badge online" onclick="manualSync()">&#9679; Terhubung Semua Perangkat</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGASI TAB UTAMA -->
+  <nav class="nav-tabs">
+    <button type="button" class="nav-tab active" id="tabBtn-rekap" onclick="switchTab('rekap')">
+      1. Stok &amp; Rekap (Toko 1-3)
+    </button>
+    <button type="button" class="nav-tab" id="tabBtn-kasir" onclick="switchTab('kasir')">
+      2. Kasir Penjualan (POS)
+    </button>
+    <button type="button" class="nav-tab" id="tabBtn-masuk" onclick="switchTab('masuk')">
+      3. Barang Masuk (Supplier)
+    </button>
+    <button type="button" class="nav-tab" id="tabBtn-mutasi" onclick="switchTab('mutasi')">
+      4. Pindah Toko &amp; Koreksi
+    </button>
+    <button type="button" class="nav-tab" id="tabBtn-katalog" onclick="switchTab('katalog')">
+      5. Katalog Foto
+    </button>
+    <button type="button" class="nav-tab" id="tabBtn-riwayat" onclick="switchTab('riwayat')">
+      6. Laporan &amp; Vercel Cloud
+    </button>
+  </nav>
+
+  <main class="main-container">
+
+    <!-- =======================================================================
+         TAB 1: REKAP & STOK TOKO 1, TOKO 2, TOKO 3 (ALUR 1, 2, 3, 6)
+         ======================================================================= -->
+    <section id="panel-rekap" class="tab-panel active">
+
+      <div class="store-switcher">
+        <button type="button" class="store-pill active" id="storeFilter-all" onclick="setStoreFilter('all')">
+          Semua / Rekap 3 Toko
+        </button>
+        <button type="button" class="store-pill toko1" id="storeFilter-toko1" onclick="setStoreFilter('toko1')">
+          <span id="labelPillToko1">Toko 1 (Pusat)</span>
+        </button>
+        <button type="button" class="store-pill toko2" id="storeFilter-toko2" onclick="setStoreFilter('toko2')">
+          <span id="labelPillToko2">Toko 2 (Cabang Pasar)</span>
+        </button>
+        <button type="button" class="store-pill toko3" id="storeFilter-toko3" onclick="setStoreFilter('toko3')">
+          <span id="labelPillToko3">Toko 3 (Cabang Ruko)</span>
+        </button>
+      </div>
+
+      <!-- Ringkasan Stok, Omzet Penjualan, & Nilai Aset -->
+      <div class="summary-row">
+        <div class="summary-col">
+          <div class="summary-card">
+            <div class="summary-label" id="sumTitleStore1">Stok Toko 1</div>
+            <div class="summary-value" id="sumQtyToko1">0</div>
+            <div class="summary-sub" id="sumAssetToko1">Modal: Rp 0</div>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-card green">
+            <div class="summary-label" id="sumTitleStore2">Stok Toko 2</div>
+            <div class="summary-value" id="sumQtyToko2">0</div>
+            <div class="summary-sub" id="sumAssetToko2">Modal: Rp 0</div>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-card purple">
+            <div class="summary-label" id="sumTitleStore3">Stok Toko 3</div>
+            <div class="summary-value" id="sumQtyToko3">0</div>
+            <div class="summary-sub" id="sumAssetToko3">Modal: Rp 0</div>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-card amber" style="cursor:pointer;" onclick="switchTab('kasir')">
+            <div class="summary-label">Total Omzet Penjualan</div>
+            <div class="summary-value" id="sumTotalSales">Rp 0</div>
+            <div class="summary-sub" id="sumTotalProfit">Laba: Rp 0</div>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-card red" style="cursor:pointer;" onclick="toggleLowStockOnly()">
+            <div class="summary-label">Stok Menipis (Order!)</div>
+            <div class="summary-value" id="sumLowStockCount">0 Item</div>
+            <div class="summary-sub" id="sumLowStockHint">Ketuk untuk filter</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter & Pencarian Barang -->
+      <div class="card">
+        <div class="card-title">
+          <span id="rekapTableHeading">Daftar &amp; Perbandingan Stok Barang (Rekap Toko 1, 2, dan 3)</span>
+          <div>
+            <button type="button" class="btn btn-success btn-sm" onclick="switchTab('kasir')" style="margin-right:4px;">Buka Kasir Penjualan</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('masuk')">+ Barang Masuk</button>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-item">
+            <input type="text" id="searchInput" class="form-control" placeholder="Cari Kode (mis: EMB-001), Nama Barang, atau Merek..." oninput="renderRekapTable()">
+          </div>
+          <div class="filter-item" style="max-width: 240px;">
+            <select id="categoryFilter" class="form-control" onchange="renderRekapTable()">
+              <option value="ALL">Semua Kategori Produk</option>
+            </select>
+          </div>
+          <div class="filter-item" style="max-width: 190px;">
+            <select id="stockAlertFilter" class="form-control" onchange="renderRekapTable()">
+              <option value="ALL">Semua Status Stok</option>
+              <option value="LOW">Hanya Stok Menipis</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th style="width:60px;">Foto</th>
+                <th>Kode &amp; Nama Barang</th>
+                <th>Kategori</th>
+                <th>Harga (Modal / Jual)</th>
+                <th id="thToko1" style="text-align:center;">Toko 1</th>
+                <th id="thToko2" style="text-align:center;">Toko 2</th>
+                <th id="thToko3" style="text-align:center;">Toko 3</th>
+                <th style="text-align:center;">Total 3 Toko</th>
+                <th style="text-align:center;">Aksi Cepat</th>
+              </tr>
+            </thead>
+            <tbody id="rekapTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         TAB 2: KASIR PENJUALAN (OTOMATIS MENGURANGI STOK TOKO 1 / 2 / 3)
+         ======================================================================= -->
+    <section id="panel-kasir" class="tab-panel">
+      <!-- Bar Pengaturan Kasir: Pilih Toko & Jenis Harga (Ecer / Grosir) -->
+      <div class="card" style="padding:12px 16px; background-color:#eff6ff; border-color:#93c5fd;">
+        <div class="form-row" style="align-items:center;">
+          <div class="form-col">
+            <label class="form-label" style="color:#1e40af;">1. Kasir Berjualan di Toko Mana? (Otomatis Potong Stok Toko Ini)</label>
+            <select id="posStoreSelect" class="form-control" style="font-weight:800;" onchange="onPosStoreOrModeChanged()">
+              <option value="toko1">Toko 1 (Pusat)</option>
+              <option value="toko2">Toko 2 (Cabang Pasar)</option>
+              <option value="toko3">Toko 3 (Cabang Ruko)</option>
+            </select>
+          </div>
+          <div class="form-col" style="max-width:240px;">
+            <label class="form-label" style="color:#1e40af;">2. Mode Harga Penjualan</label>
+            <select id="posPriceMode" class="form-control" style="font-weight:800;" onchange="onPosStoreOrModeChanged()">
+              <option value="ECER">Harga Eceran</option>
+              <option value="GROSIR">Harga Grosir / Partai</option>
+            </select>
+          </div>
+          <div class="form-col">
+            <label class="form-label" style="color:#1e40af;">3. Scan / Ketik Kode Cepat (Tekan Enter)</label>
+            <form onsubmit="onPosQuickCodeSubmit(event)" style="display:flex;">
+              <input type="text" id="posQuickCode" class="form-control" placeholder="Ketik EMB-001 lalu Enter..." style="text-transform:uppercase; font-weight:700;">
+              <button type="submit" class="btn btn-primary" style="margin-left:6px;">+Keranjang</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="pos-layout">
+        <!-- Kolom Kiri: Pilihan Barang Kasir -->
+        <div class="pos-products-col">
+          <div class="card">
+            <div class="card-title">
+              <span>Pilih Barang (Ketuk Barang untuk Masuk Keranjang Kasir)</span>
+            </div>
+            <div class="filter-bar">
+              <div class="filter-item">
+                <input type="text" id="posSearchInput" class="form-control" placeholder="Cari nama perabot / kode..." oninput="renderPosProductGrid()">
+              </div>
+              <div class="filter-item" style="max-width:200px;">
+                <select id="posCategoryFilter" class="form-control" onchange="renderPosProductGrid()">
+                  <option value="ALL">Semua Kategori</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="pos-item-grid" id="posProductGrid">
+              <!-- Diisi otomatis -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Keranjang Belanja & Pembayaran -->
+        <div class="pos-cart-col">
+          <div class="card" style="border:2px solid #2563eb;">
+            <div class="card-title">
+              <span>Nota / Keranjang Kasir (<span id="posCartStoreLabel">Toko 1</span>)</span>
+              <button type="button" class="btn btn-outline btn-sm" onclick="clearPosCart()">Kosongkan</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom:8px;">
+              <input type="text" id="posCustomerName" class="form-control" placeholder="Nama Pembeli / Toko Langganan (Opsional)">
+            </div>
+
+            <div class="cart-list" id="posCartList">
+              <!-- Diisi otomatis -->
+            </div>
+
+            <!-- Total Belanja & Pembayaran -->
+            <div style="background-color:#f8fafc; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:14px; font-weight:700; color:#475569;">TOTAL BELANJA:</span>
+                <span id="posGrandTotal" style="font-size:24px; font-weight:800; color:#059669;">Rp 0</span>
+              </div>
+
+              <div class="form-group" style="margin-bottom:6px;">
+                <label class="form-label">Uang Bayar Pelanggan (Rp)</label>
+                <input type="number" id="posPaymentInput" class="form-control" placeholder="Masukkan nominal uang diterima..." oninput="updatePosChangeDisplay()" style="font-size:18px; font-weight:800;">
+                <div class="quick-add-chips">
+                  <button type="button" class="chip-btn" onclick="setExactPosPayment()">Uang Pas</button>
+                  <button type="button" class="chip-btn" onclick="setPosPayment(50000)">50.000</button>
+                  <button type="button" class="chip-btn" onclick="setPosPayment(100000)">100.000</button>
+                  <button type="button" class="chip-btn" onclick="setPosPayment(200000)">200.000</button>
+                  <button type="button" class="chip-btn" onclick="setPosPayment(500000)">500.000</button>
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding-top:8px; border-top:1px solid #cbd5e1;">
+                <span style="font-size:14px; font-weight:700; color:#475569;">KEMBALIAN:</span>
+                <span id="posChangeDisplay" style="font-size:18px; font-weight:800; color:#1e40af;">Rp 0</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-success btn-block" style="height:54px; font-size:16px; margin-top:12px;" onclick="submitPosCheckout()">
+              SELESAIKAN PENJUALAN &amp; POTONG STOK
+            </button>
+
+            <!-- Kotak Struk Penjualan Terakhir -->
+            <div id="posLastReceiptBox" class="receipt-box" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         TAB 3: BARANG MASUK DARI SUPPLIER KE TOKO 1 / 2 / 3 (ALUR 4, 5, 7)
+         ======================================================================= -->
+    <section id="panel-masuk" class="tab-panel">
+      <div class="card">
+        <div class="card-title">
+          <span>Pencatatan Barang Masuk dari Supplier (Otomatis Deteksi Kategori &amp; Foto)</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="resetStockInForm()">Bersihkan Form</button>
+        </div>
+
+        <p style="margin-top:0; color:#475569; font-size:13px;">
+          <strong>Petunjuk Pintar (Alur 7):</strong> Ketik <strong>Kode Barang</strong> (contoh: <code>EMB-005</code> untuk Ember, <code>KRS-002</code> untuk Kursi, <code>LMR-003</code> untuk Lemari, <code>BOX-004</code> untuk Kontainer).
+          Jika kode sudah pernah ada, <strong>Nama, Kategori, Harga, &amp; Foto otomatis muncul</strong>. Jika kode baru, <strong>Kategori Produk terdeteksi otomatis</strong>!
+        </p>
+
+        <form id="stockInForm" onsubmit="submitStockIn(event)">
+          <div class="form-row">
+            <div class="form-col" style="max-width: 240px;">
+              <label class="form-label">Kode Barang / Barcode *</label>
+              <input type="text" id="inCode" class="form-control" placeholder="Contoh: EMB-001" required oninput="onCodeInputChanged()" style="font-weight:bold; text-transform:uppercase;">
+              <div id="codeAutoHint" style="font-size:12px; color:#2563eb; margin-top:4px; font-weight:600;"></div>
+            </div>
+
+            <div class="form-col">
+              <label class="form-label">Nama Barang Perabot / Plastik *</label>
+              <input type="text" id="inName" class="form-control" placeholder="Contoh: Ember Plastik 20L Gagang Besi" required oninput="onNameInputChanged()">
+            </div>
+
+            <div class="form-col" style="max-width: 250px;">
+              <label class="form-label">Kategori (Otomatis / Pilih) *</label>
+              <select id="inCategory" class="form-control">
+                <option value="Ember & Baskom">Ember &amp; Baskom (EMB/BSK)</option>
+                <option value="Kursi & Meja">Kursi &amp; Meja (KRS/MJA)</option>
+                <option value="Lemari & Laci">Lemari &amp; Laci (LMR/LCI)</option>
+                <option value="Kontainer & Box">Kontainer &amp; Box (KTK/BOX)</option>
+                <option value="Rak & Keranjang">Rak &amp; Keranjang (RAK/KRJ)</option>
+                <option value="Botol & Termos">Botol &amp; Termos (BTL/TRM)</option>
+                <option value="Peralatan Dapur">Peralatan Dapur (DPR)</option>
+                <option value="Alat Kebersihan">Alat Kebersihan (KBR/SPU)</option>
+                <option value="Kebutuhan Keluarga">Kebutuhan Keluarga (PRT)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:4px;">
+            <div class="form-col">
+              <label class="form-label">Nama Supplier / Distributor (Alur 4)</label>
+              <input type="text" id="inSupplier" list="supplierList" class="form-control" placeholder="Pilih / ketik nama supplier...">
+              <datalist id="supplierList"></datalist>
+            </div>
+
+            <div class="form-col" style="max-width: 200px;">
+              <label class="form-label">No. Nota / Surat Jalan</label>
+              <input type="text" id="inInvoice" class="form-control" placeholder="Misal: SJ-089">
+            </div>
+
+            <div class="form-col" style="max-width: 180px;">
+              <label class="form-label">Merek Produk</label>
+              <input type="text" id="inBrand" class="form-control" placeholder="Shinpo / Napolly / Lion Star">
+            </div>
+
+            <div class="form-col" style="max-width: 140px;">
+              <label class="form-label">Satuan</label>
+              <select id="inUnit" class="form-control">
+                <option value="Pcs">Pcs / Buah</option>
+                <option value="Lusin">Lusin (12 Pcs)</option>
+                <option value="Ikat">Ikat / Pak</option>
+                <option value="Dus">Dus / Karton</option>
+                <option value="Set">Set</option>
+                <option value="Unit">Unit</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:4px;">
+            <div class="form-col-3">
+              <label class="form-label">Harga Modal (Rp)</label>
+              <input type="number" id="inCostPrice" class="form-control" placeholder="0" min="0">
+            </div>
+            <div class="form-col-3">
+              <label class="form-label">Harga Jual Ecer (Rp)</label>
+              <input type="number" id="inSellPrice" class="form-control" placeholder="0" min="0">
+            </div>
+            <div class="form-col-3">
+              <label class="form-label">Harga Grosir (Rp)</label>
+              <input type="number" id="inWholesalePrice" class="form-control" placeholder="0" min="0">
+            </div>
+            <div class="form-col-3">
+              <label class="form-label">Batas Ingatkan Stok Tipis</label>
+              <input type="number" id="inMinStock" class="form-control" value="10" min="0">
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; margin-bottom: 10px;">
+            <label class="form-label" style="font-size:14px; color:#0f172a;">
+              Tujuan Barang Masuk: Masukkan Jumlah ke Toko 1, Toko 2, atau Toko 3 (Alur 5)
+            </label>
+            <div class="form-row">
+              <div class="form-col">
+                <div class="store-input-card toko1">
+                  <div style="font-weight:800; color:#1e40af; margin-bottom:6px;" id="formLabelToko1">Masuk ke Toko 1 (Pusat)</div>
+                  <div style="font-size:12px; color:#475569; margin-bottom:6px;">Stok saat ini: <strong id="curStockToko1">0</strong></div>
+                  <input type="number" id="inQtyToko1" class="form-control" value="0" min="0" style="text-align:center; font-size:20px; font-weight:800;">
+                  <div class="quick-add-chips">
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko1', 1)">+1</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko1', 6)">+6</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko1', 12)">+12 (1 Lsn)</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko1', 24)">+24</button>
+                    <button type="button" class="chip-btn" onclick="setInputQty('inQtyToko1', 0)">Reset</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-col">
+                <div class="store-input-card toko2">
+                  <div style="font-weight:800; color:#065f46; margin-bottom:6px;" id="formLabelToko2">Masuk ke Toko 2 (Cabang Pasar)</div>
+                  <div style="font-size:12px; color:#475569; margin-bottom:6px;">Stok saat ini: <strong id="curStockToko2">0</strong></div>
+                  <input type="number" id="inQtyToko2" class="form-control" value="0" min="0" style="text-align:center; font-size:20px; font-weight:800;">
+                  <div class="quick-add-chips">
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko2', 1)">+1</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko2', 6)">+6</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko2', 12)">+12 (1 Lsn)</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko2', 24)">+24</button>
+                    <button type="button" class="chip-btn" onclick="setInputQty('inQtyToko2', 0)">Reset</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-col">
+                <div class="store-input-card toko3">
+                  <div style="font-weight:800; color:#5b21b6; margin-bottom:6px;" id="formLabelToko3">Masuk ke Toko 3 (Cabang Ruko)</div>
+                  <div style="font-size:12px; color:#475569; margin-bottom:6px;">Stok saat ini: <strong id="curStockToko3">0</strong></div>
+                  <input type="number" id="inQtyToko3" class="form-control" value="0" min="0" style="text-align:center; font-size:20px; font-weight:800;">
+                  <div class="quick-add-chips">
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko3', 1)">+1</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko3', 6)">+6</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko3', 12)">+12 (1 Lsn)</button>
+                    <button type="button" class="chip-btn" onclick="addInputQty('inQtyToko3', 24)">+24</button>
+                    <button type="button" class="chip-btn" onclick="setInputQty('inQtyToko3', 0)">Reset</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:8px;">
+            <div class="form-col">
+              <label class="form-label">Foto Produk (Kamera iPad / Galeri - Otomatis Masuk Kategori)</label>
+              <div class="photo-upload-box">
+                <img id="inPhotoPreview" class="photo-preview-img" src="" alt="Preview Foto" style="display:none;">
+                <input type="file" id="inPhotoFile" accept="image/*" capture="camera" onchange="handlePhotoSelected(event)" style="margin-bottom:6px;">
+                <div style="font-size:12px; color:#64748b;">
+                  Ketuk tombol di atas untuk memfoto langsung barang dengan kamera iPad Mini. Foto otomatis dikompres &amp; masuk ke Katalog Kategori.
+                </div>
+                <button type="button" id="clearPhotoBtn" class="btn btn-outline btn-sm" style="display:none; margin-top:6px;" onclick="clearPhotoPreview()">Hapus Foto</button>
+              </div>
+            </div>
+
+            <div class="form-col">
+              <label class="form-label">Catatan Barang Masuk (Opsional)</label>
+              <textarea id="inNote" class="form-control" placeholder="Misal: Barang datang kondisi bagus, bonus 2 pcs..."></textarea>
+              <div style="margin-top: 14px;">
+                <button type="submit" class="btn btn-primary btn-block" style="height:52px; font-size:16px;">
+                  SIMPAN BARANG MASUK &amp; UPDATE STOK TOKO
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         TAB 4: PINDAH/MUTASI ANTAR TOKO & BARANG RUSAK/KELUAR
+         ======================================================================= -->
+    <section id="panel-mutasi" class="tab-panel">
+      <div class="form-row">
+        <div class="form-col">
+          <div class="card">
+            <div class="card-title">
+              <span>Pindah / Kirim Stok Antar Toko (Toko 1 &harr; Toko 2 &harr; Toko 3)</span>
+            </div>
+            <form onsubmit="submitStockTransfer(event)">
+              <div class="form-group">
+                <label class="form-label">Pilih Barang yang Dipindah *</label>
+                <select id="tfProductSelect" class="form-control" required onchange="updateTfStockInfo()"></select>
+                <div id="tfStockHint" style="font-size:12px; color:#475569; margin-top:4px;"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Dari Toko Asal *</label>
+                  <select id="tfFromStore" class="form-control" required onchange="updateTfStockInfo()">
+                    <option value="toko1">Toko 1 (Pusat)</option>
+                    <option value="toko2">Toko 2 (Cabang Pasar)</option>
+                    <option value="toko3">Toko 3 (Cabang Ruko)</option>
+                  </select>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Ke Toko Tujuan *</label>
+                  <select id="tfTargetStore" class="form-control" required>
+                    <option value="toko2">Toko 2 (Cabang Pasar)</option>
+                    <option value="toko3">Toko 3 (Cabang Ruko)</option>
+                    <option value="toko1">Toko 1 (Pusat)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" style="margin-top:8px;">
+                <label class="form-label">Jumlah yang Dipindahkan *</label>
+                <input type="number" id="tfQty" class="form-control" value="1" min="1" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Catatan Pengiriman Antar Toko</label>
+                <input type="text" id="tfNote" class="form-control" placeholder="Misal: Dikirim pakai mobil pick-up sore">
+              </div>
+              <button type="submit" class="btn btn-purple btn-block">PINDAHKAN STOK ANTAR TOKO</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="form-col">
+          <div class="card">
+            <div class="card-title">
+              <span>Catat Barang Rusak / Retur / Koreksi Keluar</span>
+            </div>
+            <form onsubmit="submitStockOut(event)">
+              <div class="form-group">
+                <label class="form-label">Pilih Barang *</label>
+                <select id="outProductSelect" class="form-control" required onchange="updateOutStockInfo()"></select>
+                <div id="outStockHint" style="font-size:12px; color:#475569; margin-top:4px;"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Diambil dari Toko Mana? *</label>
+                <select id="outStoreSelect" class="form-control" required onchange="updateOutStockInfo()">
+                  <option value="toko1">Toko 1 (Pusat)</option>
+                  <option value="toko2">Toko 2 (Cabang Pasar)</option>
+                  <option value="toko3">Toko 3 (Cabang Ruko)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Jumlah Keluar *</label>
+                <input type="number" id="outQty" class="form-control" value="1" min="1" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Alasan / Keterangan</label>
+                <input type="text" id="outNote" class="form-control" placeholder="Barang pecah / retur ke supplier / sampel">
+              </div>
+              <button type="submit" class="btn btn-danger btn-block">KURANGI STOK TOKO</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         TAB 5: KATALOG FOTO & KATEGORI PRODUK OTOMATIS (ALUR 7)
+         ======================================================================= -->
+    <section id="panel-katalog" class="tab-panel">
+      <div class="card">
+        <div class="card-title">
+          <span>Katalog Visual Produk per Kategori (Otomatis dari Kode &amp; Foto)</span>
+          <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('masuk')">+ Tambah Foto / Barang</button>
+        </div>
+        <div class="category-pills" id="catalogCategoryPills"></div>
+        <div class="catalog-grid" id="catalogGridContainer"></div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         TAB 6: LAPORAN PENJUALAN, RIWAYAT, & VERCEL / JARINGAN MULTI-PERANGKAT
+         ======================================================================= -->
+    <section id="panel-riwayat" class="tab-panel">
+
+      <!-- Rekap Penjualan per Toko -->
+      <div class="card" style="border-left: 5px solid #059669;">
+        <div class="card-title">
+          <span>Laporan Penjualan &amp; Keuntungan per Toko</span>
+        </div>
+        <div class="summary-row" style="margin-bottom:0;">
+          <div class="summary-col">
+            <div class="summary-card">
+              <div class="summary-label" id="repLabelToko1">Omzet Toko 1</div>
+              <div class="summary-value" id="repSalesToko1">Rp 0</div>
+              <div class="summary-sub" id="repProfitToko1">Laba: Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-col">
+            <div class="summary-card green">
+              <div class="summary-label" id="repLabelToko2">Omzet Toko 2</div>
+              <div class="summary-value" id="repSalesToko2">Rp 0</div>
+              <div class="summary-sub" id="repProfitToko2">Laba: Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-col">
+            <div class="summary-card purple">
+              <div class="summary-label" id="repLabelToko3">Omzet Toko 3</div>
+              <div class="summary-value" id="repSalesToko3">Rp 0</div>
+              <div class="summary-sub" id="repProfitToko3">Laba: Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-col">
+            <div class="summary-card amber">
+              <div class="summary-label">Total Gabungan 3 Toko</div>
+              <div class="summary-value" id="repSalesTotal">Rp 0</div>
+              <div class="summary-sub" id="repProfitTotal">Total Laba: Rp 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panduan Koneksi Jaringan Lokal & Vercel Cloud -->
+      <div class="card" style="border-left: 5px solid #2563eb;">
+        <div class="card-title">
+          <span>Akses Semua Perangkat di Jaringan &amp; Sinkronisasi Vercel Cloud</span>
+        </div>
+        <div style="font-size:14px; color:#334155;">
+          <p style="margin-top:0;">
+            <strong>1. Akses dari Semua Perangkat di Jaringan Wi-Fi (iPad Mini, HP Android, iPhone, Laptop Lain):</strong><br>
+            Buka browser di perangkat mana pun yang terhubung ke Wi-Fi, lalu ketik:<br>
+            <code id="ipadUrlDisplay" style="display:inline-block; margin-top:4px; padding:6px 12px; background:#eff6ff; color:#1d4ed8; font-size:16px; font-weight:bold; border-radius:6px; border:1px solid #93c5fd;">http://192.168.18.7:3000</code><br>
+            <em>Semua perangkat otomatis tersinkronisasi setiap 6 detik! Saat ada penjualan di kasir, stok di semua perangkat langsung berkurang otomatis.</em>
+          </p>
+          <p>
+            <strong>2. Deploy ke Vercel + Database Cloud (Agar Bisa Diakses dari Luar Kota / Internet):</strong><br>
+            Proyek ini sudah dilengkapi konfigurasi <code>vercel.json</code> dan Serverless API <code>/api/index.js</code>. Agar data di Vercel tersimpan permanen lintas perangkat di internet, masukkan URL <strong>Firebase Realtime Database</strong> gratis Anda di bawah ini:
+          </p>
+          <div class="form-row" style="align-items:center;">
+            <div class="form-col">
+              <label class="form-label">URL Database Cloud Realtime (Firebase Realtime DB URL)</label>
+              <input type="text" id="cfgCloudUrl" class="form-control" placeholder="Contoh: https://stok-perabot-default-rtdb.asia-southeast1.firebasedatabase.app">
+            </div>
+            <div class="form-col" style="max-width:220px; padding-top:24px;">
+              <button type="button" class="btn btn-success btn-block" onclick="saveCloudConfig()">Simpan &amp; Sinkron Cloud</button>
+            </div>
+          </div>
+          <div style="margin-top:10px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="exportBackupJSON()">Download Backup Data (.JSON)</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="exportBackupCSV()">Export Tabel Stok ke Excel (.CSV)</button>
+            <label class="btn btn-outline btn-sm" style="margin-bottom:0; cursor:pointer;">
+              Restore / Import File Backup
+              <input type="file" accept=".json" onchange="importBackupJSON(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ubah Nama Toko 1, 2, 3 -->
+      <div class="card">
+        <div class="card-title"><span>Pengaturan Nama Usaha &amp; Nama Ketiga Toko</span></div>
+        <div class="form-row">
+          <div class="form-col">
+            <label class="form-label">Nama Usaha</label>
+            <input type="text" id="cfgBusinessName" class="form-control">
+          </div>
+          <div class="form-col">
+            <label class="form-label">Nama Toko 1</label>
+            <input type="text" id="cfgStore1" class="form-control">
+          </div>
+          <div class="form-col">
+            <label class="form-label">Nama Toko 2</label>
+            <input type="text" id="cfgStore2" class="form-control">
+          </div>
+          <div class="form-col">
+            <label class="form-label">Nama Toko 3</label>
+            <input type="text" id="cfgStore3" class="form-control">
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="saveStoreNames()">Simpan Nama Toko</button>
+        </div>
+      </div>
+
+      <!-- Tabel Riwayat Barang Masuk, Penjualan Kasir, & Pindah Toko -->
+      <div class="card">
+        <div class="card-title">
+          <span>Riwayat Semua Transaksi (Penjualan Kasir, Barang Masuk Supplier, &amp; Pindah Toko)</span>
+        </div>
+        <div class="table-responsive">
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Jenis</th>
+                <th>Kode &amp; Nama Barang</th>
+                <th>Toko / Supplier</th>
+                <th>Jumlah</th>
+                <th>Nominal / Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toastBox" class="toast-msg">Berhasil disimpan!</div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

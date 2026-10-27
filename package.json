@@ -1,0 +1,22 @@
+{
+  "name": "stok-perabot-ipad-ios9",
+  "version": "1.1.0",
+  "description": "Aplikasi Manajemen Stok & Kasir Multi-Toko (Toko 1, 2, 3) Perabot Plastik - Kompatibel iPad Mini iOS 9, GitHub & Vercel Ready",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "pos",
+    "inventory",
+    "ipad-mini",
+    "ios9",
+    "plastic-store",
+    "vercel"
+  ],
+  "engines": {
+    "node": ">=18.x"
+  },
+  "private": true
+}

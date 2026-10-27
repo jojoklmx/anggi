@@ -1,0 +1,801 @@
+/* Reset & Dasar Kompatibel Safari iOS 9 */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header Aplikasi */
+.app-header {
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-bottom: 3px solid #2563eb;
+}
+
+.header-top {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.brand-area {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  line-height: 42px;
+  margin-right: 12px;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.brand-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.sync-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #1e293b;
+  color: #38bdf8;
+  border: 1px solid #334155;
+  cursor: pointer;
+}
+
+.sync-badge.online {
+  background-color: #064e3b;
+  color: #6ee7b7;
+  border-color: #059669;
+}
+
+.sync-badge.offline {
+  background-color: #78350f;
+  color: #fcd34d;
+  border-color: #d97706;
+}
+
+/* Navigasi Tab Utama (Ramah Sentuhan iPad Mini) */
+.nav-tabs {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  background-color: #ffffff;
+  border-bottom: 1px solid #cbd5e1;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-tab {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 125px;
+  padding: 13px 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  background-color: #ffffff;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.nav-tab:active {
+  background-color: #f8fafc;
+}
+
+.nav-tab.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  background-color: #eff6ff;
+}
+
+/* Kontainer Utama */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px;
+  padding-bottom: 60px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Filter Sub-Toko (Alur 1, 2, 3, 6) */
+.store-switcher {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  background-color: #e2e8f0;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.store-pill {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 130px;
+  padding: 10px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+
+.store-pill.active {
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.store-pill.toko1.active {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.store-pill.toko2.active {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+.store-pill.toko3.active {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
+/* Kartu Ringkasan / Rekap */
+.summary-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -6px;
+  margin-bottom: 14px;
+}
+
+.summary-col {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 22%;
+  flex: 1 1 22%;
+  min-width: 160px;
+  padding: 6px;
+}
+
+.summary-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #2563eb;
+}
+
+.summary-card.green {
+  border-left-color: #059669;
+}
+
+.summary-card.purple {
+  border-left-color: #7c3aed;
+}
+
+.summary-card.amber {
+  border-left-color: #d97706;
+}
+
+.summary-card.red {
+  border-left-color: #dc2626;
+}
+
+.summary-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.summary-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 4px;
+}
+
+.summary-sub {
+  font-size: 12px;
+  color: #475569;
+  margin-top: 3px;
+}
+
+/* Panel / Card Umum */
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+/* Bar Pencarian & Filter Kategori */
+.filter-bar {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -5px;
+  margin-bottom: 12px;
+}
+
+.filter-item {
+  padding: 5px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 200px;
+  flex: 1 1 200px;
+}
+
+/* Elemen Form Ramah iPad */
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  height: 44px;
+  padding: 8px 12px;
+  font-size: 15px;
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  -webkit-appearance: none;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  background-color: #f8fafc;
+}
+
+textarea.form-control {
+  height: 70px;
+  resize: vertical;
+}
+
+.form-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -6px;
+}
+
+.form-col {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 220px;
+  flex: 1 1 220px;
+  padding: 6px;
+}
+
+.form-col-3 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 160px;
+  flex: 1 1 160px;
+  padding: 6px;
+}
+
+/* Tombol Sentuh Besar */
+.btn {
+  display: inline-block;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-primary:active {
+  background-color: #1d4ed8;
+}
+
+.btn-success {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+.btn-success:active {
+  background-color: #047857;
+}
+
+.btn-purple {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
+.btn-warning {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.btn-outline {
+  background-color: #f8fafc;
+  color: #334155;
+  border: 1px solid #94a3b8;
+}
+
+.btn-sm {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+/* Tabel Stok Multi-Toko */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.stock-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.stock-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.stock-table tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Thumbnail Foto Produk */
+.prod-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background-color: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  object-fit: cover;
+  display: block;
+}
+
+.prod-thumb-placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  line-height: 52px;
+  border: 1px solid #93c5fd;
+}
+
+/* Badge Kategori & Status */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-low {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.badge-ok {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+/* Kotak Kontrol Cepat Stok (+ / -) per Toko */
+.store-stock-box {
+  display: inline-block;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 4px 6px;
+  min-width: 105px;
+  text-align: center;
+}
+
+.store-stock-box.highlight {
+  border: 2px solid #2563eb;
+  background-color: #eff6ff;
+}
+
+.qty-num {
+  display: inline-block;
+  min-width: 34px;
+  font-weight: 800;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #94a3b8;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.qty-btn:active {
+  background-color: #cbd5e1;
+}
+
+/* Kotak Input Barang Masuk per Toko (Toko 1, 2, 3) */
+.store-input-card {
+  background-color: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.store-input-card.toko1 {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.store-input-card.toko2 {
+  border-color: #6ee7b7;
+  background-color: #ecfdf5;
+}
+
+.store-input-card.toko3 {
+  border-color: #c4b5fd;
+  background-color: #f5f3ff;
+}
+
+.quick-add-chips {
+  margin-top: 8px;
+}
+
+.chip-btn {
+  display: inline-block;
+  margin: 2px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid #94a3b8;
+  background-color: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.chip-btn:active {
+  background-color: #dbeafe;
+}
+
+/* Preview Kamera / Foto Otomatis */
+.photo-upload-box {
+  border: 2px dashed #64748b;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  background-color: #f8fafc;
+}
+
+.photo-preview-img {
+  max-width: 140px;
+  max-height: 140px;
+  border-radius: 8px;
+  margin: 8px auto;
+  display: block;
+  border: 1px solid #cbd5e1;
+}
+
+/* Galeri Katalog Kategori (Alur 7) */
+.category-pills {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.cat-pill {
+  padding: 8px 14px;
+  margin-right: 8px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cat-pill.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.catalog-grid {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -6px;
+}
+
+.catalog-item {
+  width: 33.333%;
+  min-width: 230px;
+  padding: 6px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 240px;
+  flex: 1 1 240px;
+}
+
+.catalog-card {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px;
+  height: 100%;
+}
+
+/* Toast Notification */
+.toast-msg {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  width: 320px;
+  margin-left: -160px;
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  z-index: 9999;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Layout Kasir Penjualan (POS) */
+.pos-layout {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -8px;
+}
+
+.pos-products-col {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 56%;
+  flex: 1 1 56%;
+  min-width: 300px;
+  padding: 8px;
+}
+
+.pos-cart-col {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 40%;
+  flex: 1 1 40%;
+  min-width: 290px;
+  padding: 8px;
+}
+
+.pos-item-grid {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -5px;
+  max-height: 520px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pos-item-wrap {
+  width: 50%;
+  padding: 5px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 180px;
+  flex: 1 1 180px;
+}
+
+.pos-item-card {
+  background-color: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  height: 100%;
+}
+
+.pos-item-card:active {
+  background-color: #dbeafe;
+  border-color: #2563eb;
+}
+
+.pos-item-card.out-of-stock {
+  opacity: 0.55;
+  background-color: #f1f5f9;
+}
+
+.cart-list {
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  margin: 10px 0;
+  max-height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cart-row {
+  padding: 8px 4px;
+  border-bottom: 1px dashed #e2e8f0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.receipt-box {
+  background-color: #fffbeb;
+  border: 2px dashed #d97706;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .summary-col {
+    -webkit-flex: 1 1 48%;
+    flex: 1 1 48%;
+  }
+}

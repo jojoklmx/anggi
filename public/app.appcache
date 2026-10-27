@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# v1.1.0 - Offline Cache untuk Safari iOS 9 iPad Mini + Kasir POS & Vercel
+
+CACHE:
+/
+/index.html
+/style.css
+/app.js
+
+NETWORK:
+*
